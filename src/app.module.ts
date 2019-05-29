@@ -11,8 +11,8 @@ import { Connection } from 'typeorm';
 
 @Module({
   imports: [AuthModule, TypeOrmModule.forRoot(), UsersModule],
-  controllers: [AppController, UsersController],
-  providers: [AppService, AuthService, UsersService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {
   constructor(private readonly connection: Connection) {}
