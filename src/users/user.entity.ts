@@ -15,10 +15,11 @@ export class User {
     this.password = await bcrypt.hash(this.password, saltRounds);
   }
   @Column({
-    length:300,
+    length: 300,
+    select: false,
   })
   password: string;
 
   @Column({ unique: true })
   email: string;
-};
+}

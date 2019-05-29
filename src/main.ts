@@ -9,7 +9,7 @@ async function bootstrap() {
     .setTitle('To-Do Nest Project')
     .setDescription('The To-Do Nest API description')
     .setVersion('0.1')
-    .addBearerAuth('jwt')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
