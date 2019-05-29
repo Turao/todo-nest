@@ -13,15 +13,15 @@ export class UsersService {
   ) {}
 
   async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+    return this.userRepository.find();
   }
 
   async findOne(id: number): Promise<User | undefined> {
-    return await this.userRepository.findOne(id);
+    return this.userRepository.findOne(id);
   }
 
   async findByEmail(email: string): Promise<User | undefined> {
-    return await this.userRepository.findOne({
+    return this.userRepository.findOne({
       where: { email },
     });
   }
@@ -52,11 +52,11 @@ export class UsersService {
   async update(id: number, userDto: UserDTO): Promise<User> {
     const user = await this.userRepository.findOne(id);
     this.userRepository.merge(user, userDto);
-    return await this.userRepository.save(user);
+    return this.userRepository.save(user);
   }
 
   async delete(id: number): Promise<User> {
     const user = await this.userRepository.findOne(id);
-    return await this.userRepository.remove(user);
+    return this.userRepository.remove(user);
   }
 }

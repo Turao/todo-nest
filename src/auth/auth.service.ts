@@ -30,6 +30,6 @@ export class AuthService {
   }
 
   async validateUser(user: JwtPayload): Promise<any> {
-    return await this.usersService.findByEmail(user.email);
+    return this.usersService.findByEmail(user.email);
   }
 }

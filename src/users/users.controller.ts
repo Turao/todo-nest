@@ -29,14 +29,14 @@ export class UsersController {
 
   @Get()
   async findAll(): Promise<User[]> {
-    return await this.userService.findAll();
+    return this.userService.findAll();
   }
 
   @Post()
   @UsePipes(ValidationPipe)
   async create(@Body() userDto: UserDTO) {
     try {
-      return await this.userService.create(userDto);
+      return this.userService.create(userDto);
     } catch (err) {
       throw new BadRequestException();
     }
@@ -59,7 +59,7 @@ export class UsersController {
   @ApiBearerAuth()
   async update(@Param('id') id: number, @Body() userDto: UserDTO) {
     try {
-      return await this.userService.update(id, userDto);
+      return this.userService.update(id, userDto);
     } catch (err) {
       throw new BadRequestException();
     }
@@ -72,7 +72,7 @@ export class UsersController {
   @ApiBearerAuth()
   async remove(@Param('id') id: number) {
     try {
-      return await this.userService.delete(id);
+      return this.userService.delete(id);
     } catch (err) {
       throw new BadRequestException();
     }
