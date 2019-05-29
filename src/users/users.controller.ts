@@ -34,7 +34,7 @@ export class UsersController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  async create(@Body() userDto: UserDTO) {
+  async create(@Body() userDto: UserDTO): Promise<User> {
     try {
       return this.userService.create(userDto);
     } catch (err) {
@@ -44,7 +44,7 @@ export class UsersController {
 
   @Get(':id')
   @UsePipes(ValidationPipe)
-  async findOne(@Param('id') id: number) {
+  async findOne(@Param('id') id: number): Promise<User> {
     const user = await this.userService.findOne(id);
     if (!user) {
       throw new NotFoundException('User not found');
@@ -57,7 +57,10 @@ export class UsersController {
   @UseGuards(OnlyActivateIfSelf)
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  async update(@Param('id') id: number, @Body() userDto: UserDTO) {
+  async update(
+    @Param('id') id: number,
+    @Body() userDto: UserDTO,
+  ): Promise<User> {
     try {
       return this.userService.update(id, userDto);
     } catch (err) {
@@ -70,7 +73,7 @@ export class UsersController {
   @UseGuards(OnlyActivateIfSelf)
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  async remove(@Param('id') id: number) {
+  async remove(@Param('id') id: number): Promise<User> {
     try {
       return this.userService.delete(id);
     } catch (err) {
