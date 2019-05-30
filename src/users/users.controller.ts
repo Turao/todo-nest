@@ -15,11 +15,12 @@ import {
 } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
-import { UserDTO } from './user.dto';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { UpdateUserDTO } from './dto/update-user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
-import { OnlyActivateIfSelf } from './guards/is-user.guard';
+import { OnlyActivateIfSelf } from '../auth/guards/is-user.guard';
 
 @ApiUseTags('users')
 @Controller('users')
@@ -34,7 +35,7 @@ export class UsersController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  async create(@Body() userDto: UserDTO): Promise<User> {
+  async create(@Body() userDto: CreateUserDTO): Promise<User> {
     try {
       return this.userService.create(userDto);
     } catch (err) {
@@ -45,7 +46,7 @@ export class UsersController {
   @Get(':id')
   @UsePipes(ValidationPipe)
   async findOne(@Param('id') id: number): Promise<User> {
-    const user = await this.userService.findOne(id);
+    const user = await this.userService.findById(id);
     if (!user) {
       throw new NotFoundException('User not found');
     }
@@ -59,7 +60,7 @@ export class UsersController {
   @ApiBearerAuth()
   async update(
     @Param('id') id: number,
-    @Body() userDto: UserDTO,
+    @Body() userDto: UpdateUserDTO,
   ): Promise<User> {
     try {
       return this.userService.update(id, userDto);

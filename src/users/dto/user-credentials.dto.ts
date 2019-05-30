@@ -14,20 +14,6 @@ export class UserCredentialsDTO {
   @ApiModelProperty({
     type: String,
     required: true,
-    minLength: 6,
-    maxLength: 30,
   })
-  password: string;
-}
-
-export class UserDTO extends UserCredentialsDTO {
-  @IsString()
-  @Length(6, 30)
-  @ApiModelProperty({
-    type: String,
-    required: true,
-    minLength: 6,
-    maxLength: 30,
-  })
-  readonly username: string;
+  readonly password: string;
 }

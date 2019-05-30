@@ -1,7 +1,8 @@
 import { JwtService } from '@nestjs/jwt';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { UserCredentialsDTO, UserDTO } from '../users/user.dto';
+import { CreateUserDTO } from 'src/users/dto/create-user.dto';
+import { UserCredentialsDTO } from '../users/dto/user-credentials.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtResponse } from './interfaces/jwt-response.interface';
 
@@ -12,7 +13,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signup(userDTO: UserDTO): Promise<JwtResponse> {
+  async signup(userDTO: CreateUserDTO): Promise<JwtResponse> {
     let user = await this.usersService.create(userDTO);
     user = Object.assign({}, user); // sign expects payload as plain object
     const token = this.jwtService.sign(user);
@@ -30,6 +31,6 @@ export class AuthService {
   }
 
   async validateUser(user: JwtPayload): Promise<any> {
-    return this.usersService.findByEmail(user.email);
+    return this.usersService.findById(user.id);
   }
 }

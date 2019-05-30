@@ -2,22 +2,23 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
-import { UserDTO } from './user.dto';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { UpdateUserDTO } from './dto/update-user.dto';
 
 class UsersServiceMock {
   async findAll(): Promise<User[]> {
     return [];
   }
 
-  async findOne(id: number): Promise<User> {
+  async findById(id: number): Promise<User> {
     return new User();
   }
 
-  async create(userDto: UserDTO): Promise<User> {
+  async create(userDto: CreateUserDTO): Promise<User> {
     return new User();
   }
 
-  async update(id: number, userDto: UserDTO): Promise<User> {
+  async update(id: number, userDto: UpdateUserDTO): Promise<User> {
     return new User();
   }
 
@@ -58,7 +59,7 @@ describe('Users Controller', () => {
 
   describe('create', () => {
     it('should return the created users', async () => {
-      const userDto: UserDTO = {
+      const userDto: CreateUserDTO = {
         username: 'username',
         email: 'email@domain.com',
         password: 'password',
@@ -71,7 +72,7 @@ describe('Users Controller', () => {
   describe('update', () => {
     it('should return the updated user', async () => {
       const id: number = 0;
-      const newUserDto: UserDTO = {
+      const newUserDto: UpdateUserDTO = {
         username: 'username',
         email: 'email@domain.com',
         password: 'password',

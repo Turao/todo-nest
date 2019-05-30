@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UserCredentialsDTO, UserDTO } from '../users/user.dto';
+import { UserCredentialsDTO } from '../users/dto/user-credentials.dto';
+import { CreateUserDTO } from 'src/users/dto/create-user.dto';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
@@ -12,7 +13,7 @@ export class AuthServiceMock {
     return { token: 'token' };
   }
 
-  async signup(userDTO: UserDTO): Promise<JwtResponse> {
+  async signup(userDTO: CreateUserDTO): Promise<JwtResponse> {
     return { token: 'token' };
   }
 }
@@ -56,7 +57,7 @@ describe('Auth Controller', () => {
 
   describe('signup', () => {
     it('should return a json web token', async () => {
-      const userDto: UserDTO = {
+      const userDto: CreateUserDTO = {
         username: 'username',
         email: 'email@domain.com',
         password: 'password',

@@ -7,7 +7,8 @@ import {
 } from '@nestjs/common';
 import { ApiUseTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { UserDTO, UserCredentialsDTO } from '../users/user.dto';
+import { CreateUserDTO } from '../users/dto/create-user.dto';
+import { UserCredentialsDTO } from '../users/dto/user-credentials.dto';
 
 @ApiUseTags('auth')
 @Controller('auth')
@@ -21,7 +22,7 @@ export class AuthController {
   }
 
   @Post('signup')
-  async signup(@Body() userDTO: UserDTO) {
+  async signup(@Body() userDTO: CreateUserDTO) {
     try {
       return this.authService.signup(userDTO);
     } catch (err) {
