@@ -12,6 +12,8 @@ import {
   ValidationPipe,
   BadRequestException,
   NotFoundException,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
@@ -25,6 +27,7 @@ import { OnlyActivateIfSelf } from '../auth/guards/is-user.guard';
 @ApiUseTags('users')
 @Controller('users')
 @Injectable()
+@UseInterceptors(ClassSerializerInterceptor) // responsible for not exposing the user password
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
@@ -35,9 +38,9 @@ export class UsersController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  async create(@Body() userDto: CreateUserDTO): Promise<User> {
+  async create(@Body() userDTO: CreateUserDTO): Promise<User> {
     try {
-      return this.userService.create(userDto);
+      return this.userService.create(userDTO);
     } catch (err) {
       throw new BadRequestException();
     }
@@ -60,10 +63,10 @@ export class UsersController {
   @ApiBearerAuth()
   async update(
     @Param('id') id: number,
-    @Body() userDto: UpdateUserDTO,
+    @Body() userDTO: UpdateUserDTO,
   ): Promise<User> {
     try {
-      return this.userService.update(id, userDto);
+      return this.userService.update(id, userDTO);
     } catch (err) {
       throw new BadRequestException();
     }

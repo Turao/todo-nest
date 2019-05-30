@@ -57,7 +57,7 @@ describe('Auth Controller', () => {
 
   describe('signup', () => {
     it('should return a json web token', async () => {
-      const userDto: CreateUserDTO = {
+      const userDTO: CreateUserDTO = {
         username: 'username',
         email: 'email@domain.com',
         password: 'password',
@@ -65,7 +65,7 @@ describe('Auth Controller', () => {
       const result: JwtResponse = {
         token: 'token',
       };
-      expect(await controller.signup(userDto)).toEqual(result);
+      expect(await controller.signup(userDTO)).toEqual(result);
     });
   });
 });

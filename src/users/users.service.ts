@@ -26,7 +26,6 @@ export class UsersService {
     credentials: UserCredentialsDTO,
   ): Promise<User | undefined> {
     let user = await this.userRepository.findOne({
-      select: ['id', 'email', 'password'],
       where: { email: credentials.email },
     });
     const isValidPassword = await bcrypt.compare(
@@ -34,24 +33,19 @@ export class UsersService {
       user.password,
     );
 
-    delete user.password; // never expose the password
     return isValidPassword ? user : undefined;
   }
 
-  async create(userDto: CreateUserDTO): Promise<User> {
-    const user = await this.userRepository.create(userDto);
+  async create(userDTO: CreateUserDTO): Promise<User> {
+    const user = await this.userRepository.create(userDTO);
     await this.userRepository.save(user);
-    delete user.password;
     return user;
   }
 
-  async update(id: number, userDto: UpdateUserDTO): Promise<User> {
-    const user = await this.userRepository.findOne(id, {
-      select: ['id', 'email', 'username', 'password'],
-    });
-    this.userRepository.merge(user, userDto);
+  async update(id: number, userDTO: UpdateUserDTO): Promise<User> {
+    const user = await this.userRepository.findOne(id);
+    this.userRepository.merge(user, userDTO);
     await this.userRepository.save(user);
-    delete user.password;
     return user;
   }
 

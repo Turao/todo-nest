@@ -6,24 +6,31 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 
 class UsersServiceMock {
+  static mockUserDTO: CreateUserDTO | UpdateUserDTO = {
+    username: 'john wick',
+    email: 'baba@yaga.com',
+    password: 'babayaga',
+  };
+  static mockUser: User = new User(UsersServiceMock.mockUserDTO);
+
   async findAll(): Promise<User[]> {
     return [];
   }
 
   async findById(id: number): Promise<User> {
-    return new User();
+    return UsersServiceMock.mockUser;
   }
 
-  async create(userDto: CreateUserDTO): Promise<User> {
-    return new User();
+  async create(userDTO: CreateUserDTO): Promise<User> {
+    return UsersServiceMock.mockUser;
   }
 
-  async update(id: number, userDto: UpdateUserDTO): Promise<User> {
-    return new User();
+  async update(id: number, userDTO: UpdateUserDTO): Promise<User> {
+    return UsersServiceMock.mockUser;
   }
 
   async delete(id: number): Promise<User> {
-    return new User();
+    return UsersServiceMock.mockUser;
   }
 }
 
@@ -52,40 +59,32 @@ describe('Users Controller', () => {
   describe('findOne', () => {
     it('should return an user', async () => {
       const id: number = 0;
-      const result: User = new User();
+      const result: User = UsersServiceMock.mockUser;
       expect(await controller.findOne(id)).toEqual(result);
     });
   });
 
   describe('create', () => {
     it('should return the created users', async () => {
-      const userDto: CreateUserDTO = {
-        username: 'username',
-        email: 'email@domain.com',
-        password: 'password',
-      };
-      const result: User = new User();
-      expect(await controller.create(userDto)).toEqual(result);
+      const userDTO: UpdateUserDTO = UsersServiceMock.mockUserDTO;
+      const result: User = UsersServiceMock.mockUser;
+      expect(await controller.create(userDTO)).toEqual(result);
     });
   });
 
   describe('update', () => {
     it('should return the updated user', async () => {
       const id: number = 0;
-      const newUserDto: UpdateUserDTO = {
-        username: 'username',
-        email: 'email@domain.com',
-        password: 'password',
-      };
-      const result: User = new User();
-      expect(await controller.update(id, newUserDto)).toEqual(result);
+      const userDTO: UpdateUserDTO = UsersServiceMock.mockUserDTO;
+      const result: User = UsersServiceMock.mockUser;
+      expect(await controller.update(id, userDTO)).toEqual(result);
     });
   });
 
   describe('update', () => {
     it('should return the removed user', async () => {
       const id: number = 0;
-      const result: User = new User();
+      const result: User = UsersServiceMock.mockUser;
       expect(await controller.remove(id)).toEqual(result);
     });
   });

@@ -5,6 +5,7 @@ import {
   BeforeInsert,
   BeforeUpdate,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 
 @Entity()
@@ -21,12 +22,14 @@ export class User {
     const saltRounds = 10;
     this.password = await bcrypt.hash(this.password, saltRounds);
   }
-  @Column({
-    length: 300,
-    select: false,
-  })
+  @Column({ length: 300 })
+  @Exclude()
   password: string;
 
   @Column({ unique: true })
   email: string;
+
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
+  }
 }
