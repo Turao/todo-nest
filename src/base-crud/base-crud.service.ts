@@ -2,10 +2,10 @@ import { Repository, DeepPartial } from 'typeorm';
 
 export interface IBaseCrudService<T = any> {
   findAll(): Promise<T[]>;
-  findById(id: any): Promise<T>;
-  create(dto: any): Promise<T>;
-  update(id: any, dto: any): Promise<T>;
-  delete(id: any): Promise<T>;
+  findById(id: number): Promise<T>;
+  create(dto: DeepPartial<T>): Promise<T>;
+  update(id: number, dto: DeepPartial<T>): Promise<T>;
+  delete(id: number): Promise<T>;
 }
 
 export class BaseCrudService<T = any> implements IBaseCrudService<T> {

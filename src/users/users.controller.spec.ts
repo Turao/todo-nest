@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 
@@ -11,25 +11,25 @@ class UsersServiceMock {
     email: 'baba@yaga.com',
     password: 'babayaga',
   };
-  static mockUser: User = new User(UsersServiceMock.mockUserDTO);
+  static mockUser: UserEntity = new UserEntity(UsersServiceMock.mockUserDTO);
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<UserEntity[]> {
     return [];
   }
 
-  async findById(id: number): Promise<User> {
+  async findById(id: number): Promise<UserEntity> {
     return UsersServiceMock.mockUser;
   }
 
-  async create(userDTO: CreateUserDTO): Promise<User> {
+  async create(userDTO: CreateUserDTO): Promise<UserEntity> {
     return UsersServiceMock.mockUser;
   }
 
-  async update(id: number, userDTO: UpdateUserDTO): Promise<User> {
+  async update(id: number, userDTO: UpdateUserDTO): Promise<UserEntity> {
     return UsersServiceMock.mockUser;
   }
 
-  async delete(id: number): Promise<User> {
+  async delete(id: number): Promise<UserEntity> {
     return UsersServiceMock.mockUser;
   }
 }
@@ -51,7 +51,7 @@ describe('Users Controller', () => {
 
   describe('findAll', () => {
     it('should return an array of users', async () => {
-      const result: User[] = [];
+      const result: UserEntity[] = [];
       expect(await controller.findAll()).toEqual(result);
     });
   });
@@ -59,7 +59,7 @@ describe('Users Controller', () => {
   describe('findOne', () => {
     it('should return an user', async () => {
       const id: number = 0;
-      const result: User = UsersServiceMock.mockUser;
+      const result: UserEntity = UsersServiceMock.mockUser;
       expect(await controller.findOne(id)).toEqual(result);
     });
   });
@@ -67,7 +67,7 @@ describe('Users Controller', () => {
   describe('create', () => {
     it('should return the created users', async () => {
       const userDTO: UpdateUserDTO = UsersServiceMock.mockUserDTO;
-      const result: User = UsersServiceMock.mockUser;
+      const result: UserEntity = UsersServiceMock.mockUser;
       expect(await controller.create(userDTO)).toEqual(result);
     });
   });
@@ -76,7 +76,7 @@ describe('Users Controller', () => {
     it('should return the updated user', async () => {
       const id: number = 0;
       const userDTO: UpdateUserDTO = UsersServiceMock.mockUserDTO;
-      const result: User = UsersServiceMock.mockUser;
+      const result: UserEntity = UsersServiceMock.mockUser;
       expect(await controller.update(id, userDTO)).toEqual(result);
     });
   });
@@ -84,7 +84,7 @@ describe('Users Controller', () => {
   describe('update', () => {
     it('should return the removed user', async () => {
       const id: number = 0;
-      const result: User = UsersServiceMock.mockUser;
+      const result: UserEntity = UsersServiceMock.mockUser;
       expect(await controller.remove(id)).toEqual(result);
     });
   });

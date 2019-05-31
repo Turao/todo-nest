@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 
 // mock user repository to avoid database connections
 class UserRepositoryMock {}
@@ -14,7 +14,7 @@ describe('UsersService', () => {
       providers: [
         UsersService,
         {
-          provide: getRepositoryToken(User),
+          provide: getRepositoryToken(UserEntity),
           useValue: new UserRepositoryMock(),
         },
       ],

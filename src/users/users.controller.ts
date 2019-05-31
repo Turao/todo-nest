@@ -19,7 +19,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 import { UsersService } from './users.service';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { OnlyActivateIfSelf } from '../auth/guards/is-user.guard';
@@ -32,13 +32,13 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get()
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<UserEntity[]> {
     return this.userService.findAll();
   }
 
   @Post()
   @UsePipes(ValidationPipe)
-  async create(@Body() userDTO: CreateUserDTO): Promise<User> {
+  async create(@Body() userDTO: CreateUserDTO): Promise<UserEntity> {
     try {
       return this.userService.create(userDTO);
     } catch (err) {
@@ -48,7 +48,7 @@ export class UsersController {
 
   @Get(':id')
   @UsePipes(ValidationPipe)
-  async findOne(@Param('id') id: number): Promise<User> {
+  async findOne(@Param('id') id: number): Promise<UserEntity> {
     const user = await this.userService.findById(id);
     if (!user) {
       throw new NotFoundException('User not found');
@@ -64,7 +64,7 @@ export class UsersController {
   async update(
     @Param('id') id: number,
     @Body() userDTO: UpdateUserDTO,
-  ): Promise<User> {
+  ): Promise<UserEntity> {
     try {
       return this.userService.update(id, userDTO);
     } catch (err) {
@@ -77,7 +77,7 @@ export class UsersController {
   @UseGuards(OnlyActivateIfSelf)
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  async remove(@Param('id') id: number): Promise<User> {
+  async remove(@Param('id') id: number): Promise<UserEntity> {
     try {
       return this.userService.delete(id);
     } catch (err) {

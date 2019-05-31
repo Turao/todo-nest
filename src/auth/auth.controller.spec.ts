@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UserCredentialsDTO } from '../users/dto/user-credentials.dto';
-import { CreateUserDTO } from 'src/users/dto/create-user.dto';
+import { CreateUserDTO } from '../users/dto/create-user.dto';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';

@@ -9,7 +9,7 @@ import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 
 @Entity()
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -29,7 +29,7 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  constructor(partial: Partial<User>) {
+  constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);
   }
 }

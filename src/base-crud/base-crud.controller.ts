@@ -6,19 +6,23 @@ import {
   Put,
   Delete,
   Injectable,
+  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { IBaseCrudService } from './base-crud.service';
+import { DeepPartial } from 'typeorm';
 
-export interface IBaseCrudController<T = any> {
+export interface IBaseCrudController<T = any, C = any> {
   findAll(): Promise<T[]>;
-  findById(id: any): Promise<T>;
-  create(dto: any): Promise<T>;
-  update(id: any, dto: any): Promise<T>;
-  remove(id: any): Promise<T>;
+  findById(id: number): Promise<T>;
+  create(createDTO: C): Promise<T>;
+  update(id: number, updateDTO: DeepPartial<T>): Promise<T>;
+  remove(id: number): Promise<T>;
 }
 
 @Injectable()
-export class BaseCrudController<T = any> implements IBaseCrudController<T> {
+export class BaseCrudController<T = any, C = any>
+  implements IBaseCrudController<T, C> {
   constructor(private readonly service: IBaseCrudService) {}
 
   @Get()
@@ -27,22 +31,41 @@ export class BaseCrudController<T = any> implements IBaseCrudController<T> {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: any): Promise<T> {
-    return this.service.findById(id);
+  async findById(@Param('id') id: number): Promise<T> {
+    const resource = await this.service.findById(id);
+    if (!resource) {
+      throw new NotFoundException();
+    }
+    return resource;
   }
 
   @Post()
-  async create(@Body() dto: any): Promise<T> {
-    return this.service.create(dto);
+  async create(@Body() createDTO: C): Promise<T> {
+    try {
+      return this.service.create(createDTO);
+    } catch (err) {
+      throw new BadRequestException();
+    }
   }
 
   @Put(':id')
-  async update(@Param('id') id: any, @Body() dto: any): Promise<T> {
-    return this.service.update(id, dto);
+  async update(
+    @Param('id') id: number,
+    @Body() updateDTO: DeepPartial<T>,
+  ): Promise<T> {
+    try {
+      return this.service.update(id, updateDTO);
+    } catch (err) {
+      throw new BadRequestException();
+    }
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: any): Promise<T> {
-    return this.service.delete(id);
+  async remove(@Param('id') id: number): Promise<T> {
+    try {
+      return this.service.delete(id);
+    } catch (err) {
+      throw new BadRequestException();
+    }
   }
 }
