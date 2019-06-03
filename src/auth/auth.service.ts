@@ -14,15 +14,15 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signup(userDTO: CreateUserDTO): Promise<JwtResponse> {
+  async signup(userDTO: CreateUserDTO): Promise<string> {
     let user = await this.usersService.create(userDTO);
     // sign expects payload as plain object
     //! use classToPlain so class-transformer can exclude the user's password
     const token = this.jwtService.sign(classToPlain(user));
-    return { token };
+    return token;
   }
 
-  async login(credentials: UserCredentialsDTO): Promise<JwtResponse> {
+  async login(credentials: UserCredentialsDTO): Promise<string> {
     let user = await this.usersService.findByCredentials(credentials);
     if (!user) {
       throw new BadRequestException('Invalid credentials');
@@ -30,7 +30,7 @@ export class AuthService {
     // sign expects payload as plain object
     //! use classToPlain so class-transformer can exclude the user's password
     const token = this.jwtService.sign(classToPlain(user));
-    return { token };
+    return token;
   }
 
   async validateUser(user: JwtPayload): Promise<any> {

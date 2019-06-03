@@ -8,7 +8,12 @@ import { JwtPayload } from './interfaces/jwt-payload.interface';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly authService: AuthService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: req => {
+        let token = null;
+        if (req && req.cookies) token = req.cookies['access_token'];
+        console.log(token);
+        return token;
+      },
       secretOrKey: 'secret',
     });
   }
