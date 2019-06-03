@@ -4,9 +4,11 @@ import {
   PrimaryGeneratedColumn,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
+import { ProductEntity } from '../products/product.entity';
 
 @Entity()
 export class UserEntity {
@@ -28,6 +30,9 @@ export class UserEntity {
 
   @Column({ unique: true })
   email: string;
+
+  @OneToMany(type => ProductEntity, product => product.owner)
+  products: ProductEntity[];
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);

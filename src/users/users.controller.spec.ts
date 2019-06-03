@@ -60,7 +60,7 @@ describe('Users Controller', () => {
     it('should return an user', async () => {
       const id: number = 0;
       const result: UserEntity = UsersServiceMock.mockUser;
-      expect(await controller.findOne(id)).toEqual(result);
+      expect(await controller.findById(id)).toEqual(result);
     });
   });
 

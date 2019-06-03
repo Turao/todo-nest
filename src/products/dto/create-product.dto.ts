@@ -1,7 +1,7 @@
 import { IsString } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
 
-export class CreateItemDTO {
+export class CreateProductDTO {
   @IsString()
   @ApiModelProperty({ type: String })
   readonly title: string;

@@ -12,17 +12,17 @@ import {
 import { IBaseCrudService } from './base-crud.service';
 import { DeepPartial } from 'typeorm';
 
-export interface IBaseCrudController<T = any, C = any> {
+export interface IBaseCrudController<T = any, C = any, U = any> {
   findAll(): Promise<T[]>;
   findById(id: number): Promise<T>;
   create(createDTO: C): Promise<T>;
-  update(id: number, updateDTO: DeepPartial<T>): Promise<T>;
+  update(id: number, updateDTO: U): Promise<T>;
   remove(id: number): Promise<T>;
 }
 
 @Injectable()
-export class BaseCrudController<T = any, C = any>
-  implements IBaseCrudController<T, C> {
+export class BaseCrudController<T = any, C = any, U = any>
+  implements IBaseCrudController<T, C, U> {
   constructor(private readonly service: IBaseCrudService) {}
 
   @Get()
@@ -49,10 +49,7 @@ export class BaseCrudController<T = any, C = any>
   }
 
   @Put(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() updateDTO: DeepPartial<T>,
-  ): Promise<T> {
+  async update(@Param('id') id: number, @Body() updateDTO: U): Promise<T> {
     try {
       return this.service.update(id, updateDTO);
     } catch (err) {

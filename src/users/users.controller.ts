@@ -48,7 +48,7 @@ export class UsersController {
 
   @Get(':id')
   @UsePipes(ValidationPipe)
-  async findOne(@Param('id') id: number): Promise<UserEntity> {
+  async findById(@Param('id') id: number): Promise<UserEntity> {
     const user = await this.userService.findById(id);
     if (!user) {
       throw new NotFoundException('User not found');
