@@ -5,6 +5,7 @@ import { CreateUserDTO } from '../users/dto/create-user.dto';
 import { UserCredentialsDTO } from '../users/dto/user-credentials.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtResponse } from './interfaces/jwt-response.interface';
+import { classToPlain } from 'class-transformer';
 
 @Injectable()
 export class AuthService {
@@ -15,8 +16,9 @@ export class AuthService {
 
   async signup(userDTO: CreateUserDTO): Promise<JwtResponse> {
     let user = await this.usersService.create(userDTO);
-    user = Object.assign({}, user); // sign expects payload as plain object
-    const token = this.jwtService.sign(user);
+    // sign expects payload as plain object
+    //! use classToPlain so class-transformer can exclude the user's password
+    const token = this.jwtService.sign(classToPlain(user));
     return { token };
   }
 
@@ -25,8 +27,9 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException('Invalid credentials');
     }
-    user = Object.assign({}, user); // sign expects payload as plain object
-    const token = this.jwtService.sign(user);
+    // sign expects payload as plain object
+    //! use classToPlain so class-transformer can exclude the user's password
+    const token = this.jwtService.sign(classToPlain(user));
     return { token };
   }
 

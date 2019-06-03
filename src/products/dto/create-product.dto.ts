@@ -1,5 +1,6 @@
-import { IsString } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
+import { UserEntity } from '../../users/user.entity';
 
 export class CreateProductDTO {
   @IsString()
@@ -8,5 +9,7 @@ export class CreateProductDTO {
 
   @IsString()
   @ApiModelProperty({ type: String })
-  readonly content: string;
+  readonly description: string;
+
+  readonly owner: UserEntity;
 }

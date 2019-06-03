@@ -16,7 +16,7 @@ export class ProductEntity {
   readonly title: string;
 
   @Column()
-  readonly content: string;
+  readonly description: string;
 
   @ManyToOne(type => UserEntity, user => user.products)
   owner: UserEntity;

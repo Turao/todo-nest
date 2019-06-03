@@ -18,22 +18,23 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  async findById(id: number): Promise<UserEntity | undefined> {
-    return this.userRepository.findOne(id);
+  async findById(id: number): Promise<UserEntity> {
+    return this.userRepository.findOne(id, { relations: ['products'] });
   }
 
   async findByCredentials(
     credentials: UserCredentialsDTO,
-  ): Promise<UserEntity | undefined> {
+  ): Promise<UserEntity> {
     let user = await this.userRepository.findOne({
       where: { email: credentials.email },
     });
+    if (!user) return null;
+
     const isValidPassword = await bcrypt.compare(
       credentials.password,
       user.password,
     );
-
-    return isValidPassword ? user : undefined;
+    return isValidPassword ? user : null;
   }
 
   async create(userDTO: CreateUserDTO): Promise<UserEntity> {

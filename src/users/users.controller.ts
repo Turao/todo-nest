@@ -26,8 +26,9 @@ import { OnlyActivateIfSelf } from '../auth/guards/is-user.guard';
 
 @ApiUseTags('users')
 @Controller('users')
+@UsePipes(ValidationPipe)
 @Injectable()
-@UseInterceptors(ClassSerializerInterceptor) // responsible for not exposing the user password
+// @UseInterceptors(ClassSerializerInterceptor) // responsible for not exposing the user password
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
@@ -37,8 +38,7 @@ export class UsersController {
   }
 
   @Post()
-  @UsePipes(ValidationPipe)
-  async create(@Body() userDTO: CreateUserDTO): Promise<UserEntity> {
+  async create(@Body('user') userDTO: CreateUserDTO): Promise<UserEntity> {
     try {
       return this.userService.create(userDTO);
     } catch (err) {
@@ -47,7 +47,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  @UsePipes(ValidationPipe)
+  @UseGuards(AuthGuard('jwt'), OnlyActivateIfSelf)
   async findById(@Param('id') id: number): Promise<UserEntity> {
     const user = await this.userService.findById(id);
     if (!user) {
@@ -57,13 +57,11 @@ export class UsersController {
   }
 
   @Put(':id')
-  @UsePipes(ValidationPipe)
-  @UseGuards(OnlyActivateIfSelf)
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), OnlyActivateIfSelf)
   @ApiBearerAuth()
   async update(
     @Param('id') id: number,
-    @Body() userDTO: UpdateUserDTO,
+    @Body('user') userDTO: UpdateUserDTO,
   ): Promise<UserEntity> {
     try {
       return this.userService.update(id, userDTO);
@@ -73,13 +71,23 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @UsePipes(ValidationPipe)
-  @UseGuards(OnlyActivateIfSelf)
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), OnlyActivateIfSelf)
   @ApiBearerAuth()
   async remove(@Param('id') id: number): Promise<UserEntity> {
     try {
       return this.userService.delete(id);
+    } catch (err) {
+      throw new BadRequestException();
+    }
+  }
+
+  @Get(':id/products')
+  @UseGuards(AuthGuard('jwt'), OnlyActivateIfSelf)
+  @ApiBearerAuth()
+  async getProducts(@Param('id') id: number) {
+    try {
+      const user = await this.userService.findById(id);
+      return user.products;
     } catch (err) {
       throw new BadRequestException();
     }
